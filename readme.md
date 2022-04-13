@@ -3,8 +3,18 @@
 
 ### Start the apache/httpd webserver
 add Parameter -d after "up" to run the container as deamon in the brackground
+#### Apache
 ```bash
-$ docker-compose up
+$ docker-compose -f docker-compose.yml -f docker-compose.apache.yml up
+or
+$ bash runApache.sh
+```
+
+#### Nginx
+```bash
+$ docker-compose -f docker-compose.yml -f docker-compose.nginx.yml up
+or 
+$ bash runNginx.sh
 ```
 
 ### Activate proxy settings to forward requests to the Certbot standalone server configuration

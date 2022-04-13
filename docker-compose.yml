@@ -1,26 +1,3 @@
 version: '3.4'
-services:
-  apache-proxy-certbot:
-    image: httpd-proxy-certbot
-    build:
-      context: './apache/' 
-      target: httpd-proxy-certbot
-      args:
-        DOMAIN: ${MY_DOMAIN_1}
-        HTTPD_USER: ${HTTPD_USER} 
-    volumes:
-       - ./www/:/var/www/html/
-
-       - ./certs/live/${MY_DOMAIN_1}/:/usr/local/apache2/TLS/
-       - ./certs/archive/${MY_DOMAIN_1}/:/usr/local/archive/${MY_DOMAIN_1}
-
-       - ./apache/httpd-conf/:/usr/local/apache2/conf/extra/httpd-conf/
-    env_file:
-      - .env
-    ports:
-      - 80:80
-      - 443:443
-    networks:
-      - backend
 networks:
   backend:

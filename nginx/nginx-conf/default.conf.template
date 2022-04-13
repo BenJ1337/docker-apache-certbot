@@ -1,0 +1,52 @@
+server {
+    listen       80;
+    listen       443 ssl;
+
+    ssl_certificate     /etc/tls/certs/nginx/live/${MY_DOMAIN_1}/fullchain.pem;
+    ssl_certificate_key /etc/tls/certs/nginx/live/${MY_DOMAIN_1}/privkey.pem;
+    ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+    keepalive_timeout   70;
+
+    server_name ${MY_DOMAIN_1};
+
+    server_tokens off;
+    fastcgi_hide_header X-Powered-By;
+
+    error_log /var/log/nginx/error.log warn;
+    access_log  /var/log/nginx/host.access.log  main;
+
+	location = /favicon.ico { access_log off; log_not_found off; }
+	location = /robots.txt  { access_log off; log_not_found off; }
+
+    root   /usr/share/nginx/html/;
+
+    index index.html index.htm;
+
+    error_page 404 /index.php;
+
+    proxy_connect_timeout       10800;
+	proxy_send_timeout          10800;
+	proxy_read_timeout          10800;
+	send_timeout                10800;
+	fastcgi_send_timeout        10800;
+	fastcgi_read_timeout        10800;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
+    location ~ /\.ht {
+        deny  all;
+    }
+
+    location /.well-known/acme-challenge/ {
+        set $upstream ${CERTBOT_CONTAINER_SERVICE_NAME};
+        proxy_pass http:///$upstream/.well-known/acme-challenge/;
+    }
+
+}
+

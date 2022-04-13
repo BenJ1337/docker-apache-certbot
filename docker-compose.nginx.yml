@@ -1,0 +1,26 @@
+version: '3.4'
+services:
+  nginx-proxy-certbot:
+    image: nginx-proxy-certbot
+    container_name: nginx-proxy-certbot-cntnr
+    build:
+      context: './nginx/' 
+      target: nginx-proxy-certbot
+      args:
+        DOMAIN: ${MY_DOMAIN_1}
+        HTTPD_USER: ${HTTPD_USER} 
+    volumes:
+      - ./www/:/usr/share/nginx/html/
+      # comment out the following line to use the included self-signed cert
+      - ./certs/live/${MY_DOMAIN_1}/:/etc/tls/certs/nginx/live/${MY_DOMAIN_1}/
+      - ./certs/archive/${MY_DOMAIN_1}/:/etc/tls/certs/nginx/archive/${MY_DOMAIN_1}/
+
+      - ./nginx/nginx-conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/nginx-conf/default.conf.template:/etc/nginx/templates/default.conf.template
+    env_file:
+      - .env
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - backend
