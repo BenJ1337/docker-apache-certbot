@@ -25,16 +25,13 @@ echo "${domains[@]}"
 
 echo "start Docker Containter with Certbot.."
 docker run -it --rm \
-            -v "/home/ubuntu/docker-apache-certbot/certs:/etc/letsencrypt" \
+            -v "$CERTBOT_CERTS_PATH:/etc/letsencrypt" \
             --network $CERTBOT_BACKEND_NETWORK \
             --name $CERTBOT_CONTAINER_SERVICE_NAME \
-            certbot/certbot certonly \
+            "certbot/certbot:$CERTBOT_TAG" certonly\
             --verbose \
             --keep-until-expiring \
             --agree-tos --email $CERTBOT_EMAIL \
             --preferred-challenges http \
             --standalone \
-            "${domains[@]}" 
-
-
-echo "Script erfolgreich durchlaufen."
+            "${domains[@]}"

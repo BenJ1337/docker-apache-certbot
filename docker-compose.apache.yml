@@ -4,11 +4,11 @@ services:
     image: httpd-proxy-certbot
     container_name: apache-proxy-certbot-cntnr
     build:
-      context: './apache/' 
+      context: './apache/'
       target: httpd-proxy-certbot
       args:
         DOMAIN: ${MY_DOMAIN_1}
-        HTTPD_USER: ${HTTPD_USER} 
+        HTTPD_USER: ${HTTPD_USER}
     volumes:
       - ./www/:/var/www/html/
       # comment out the following line to use the included self-signed cert
